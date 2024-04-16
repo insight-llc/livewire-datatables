@@ -14,6 +14,7 @@ class Column
     public $label;
     public $tooltip;
     public $name;
+    public $aggregate;
     public $select;
     public $joins;
     public $base;

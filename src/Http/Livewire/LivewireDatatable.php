@@ -290,7 +290,9 @@ class LivewireDatatable extends Component
             session()->put($this->sessionStorageKey() . '_search', $this->search);
         }
 
-        return parent::dehydrate(); // @phpstan-ignore-line
+        // I think we can safely comment this out based on the following link:
+        // https://github.com/livewire/livewire/blob/c3e0031652dd7387f0a6c8cd605a4d0d253a7145/src/Component.php#L312
+        // return parent::dehydrate(); // @phpstan-ignore-line
     }
 
     public function columns()
@@ -1725,7 +1727,7 @@ class LivewireDatatable extends Component
 
     public function render()
     {
-        $this->emit('refreshDynamic');
+        $this->dispatch('refreshDynamic');
 
         if ($this->persistPerPage) {
             session()->put([$this->sessionStorageKey() . '_perpage' => $this->perPage]);
