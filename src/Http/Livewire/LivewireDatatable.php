@@ -1645,7 +1645,7 @@ class LivewireDatatable extends Component
                     $row->$name = $this->highlight($row->$name, $this->search);
                 }
                 if ($export && isset($this->export_callbacks[$name])) {
-                    $values = Str::contains($value, static::SEPARATOR) ? explode(static::SEPARATOR, $value) : [$value, $row];
+                    $values = Str::contains($value, static::SEPARATOR) ? explode(static::SEPARATOR, (string) $value) : [$value, $row];
                     $row->$name = $this->export_callbacks[$name](...$values);
                 } elseif (isset($this->editables[$name])) {
                     $row->$name = view('datatables::editable', [
@@ -1657,7 +1657,7 @@ class LivewireDatatable extends Component
                 } elseif (isset($this->callbacks[$name]) && is_string($this->callbacks[$name])) {
                     $row->$name = $this->{$this->callbacks[$name]}($value, $row);
                 } elseif (Str::startsWith($name, 'callback_')) {
-                    $row->$name = $this->callbacks[$name](...explode(static::SEPARATOR, $value));
+                    $row->$name = $this->callbacks[$name](...explode(static::SEPARATOR, (string) $value));
                 } elseif (isset($this->callbacks[$name]) && is_callable($this->callbacks[$name])) {
                     $row->$name = $this->callbacks[$name]($value, $row);
                 }
