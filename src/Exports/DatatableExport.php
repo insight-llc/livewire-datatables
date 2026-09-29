@@ -2,6 +2,7 @@
 
 namespace Mediconesystems\LivewireDatatables\Exports;
 
+use Illuminate\Support\Enumerable;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -16,16 +17,17 @@ class DatatableExport implements FromCollection, WithHeadings, ShouldAutoSize, W
     use Exportable;
 
     public $collection;
-    public $fileName = 'DatatableExport.xlsx';
+    protected ?string $fileName = null;
     public $styles = [];
     public $columnWidths = [];
 
     public function __construct($collection)
     {
         $this->collection = $collection;
+        $this->fileName = 'DatatableExport.xlsx';
     }
 
-    public function collection()
+    public function collection(): Enumerable
     {
         return $this->collection;
     }
@@ -76,7 +78,7 @@ class DatatableExport implements FromCollection, WithHeadings, ShouldAutoSize, W
         return $this->styles;
     }
 
-    public function styles(Worksheet $sheet)
+    public function styles(Worksheet $sheet): ?array
     {
         return $this->getStyles();
     }
