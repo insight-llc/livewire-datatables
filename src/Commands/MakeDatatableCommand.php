@@ -9,7 +9,7 @@ class MakeDatatableCommand extends FileManipulationCommand
 {
     protected $signature = 'make:livewire-datatable {name} {--model=}';
 
-    protected $description = 'Create a new Livewire Datatable';
+    protected $desciption = 'Create a new Livewire Datatable';
 
     public function handle()
     {

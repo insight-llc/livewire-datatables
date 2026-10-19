@@ -2,31 +2,23 @@
 
 namespace Mediconesystems\LivewireDatatables\Tests;
 
+use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use Livewire\LivewireServiceProvider;
 use Maatwebsite\Excel\ExcelServiceProvider;
-use Mediconesystems\LivewireDatatables\Commands\ComponentParser;
 use Mediconesystems\LivewireDatatables\LivewireDatatablesServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 use Reedware\LaravelRelationJoins\LaravelRelationJoinServiceProvider;
 
-use function Orchestra\Testbench\default_skeleton_path;
-
 class TestCase extends Orchestra
 {
-    /**
-     * The artisan shim roots Testbench at this repository, and `artisan test` passes that path on.
-     * The package has no `App\` namespace, so tests always boot Testbench's own skeleton.
-     */
-    public static function applicationBasePath(): string
-    {
-        return default_skeleton_path();
-    }
-
-    protected function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
-        $this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/database/migrations');
+        $this->withFactories(__DIR__ . '/database/factories');
+        $this->artisan('migrate', ['--database' => 'sqlite'])->run();
     }
 
     protected function getPackageProviders($app)
@@ -41,6 +33,7 @@ class TestCase extends Orchestra
 
     public function getEnvironmentSetUp($app)
     {
+        $app['config']->set('app.key', 'AckfSECXIvnK5r28GVIWUAxmbBSjTsmF');
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
             'driver' => 'sqlite',
@@ -49,10 +42,20 @@ class TestCase extends Orchestra
         ]);
     }
 
-    protected function livewireClassesPath(string $path = ''): string
+    protected function renderBladeString(string $bladeContent): string
     {
-        $classPath = ComponentParser::generatePathFromNamespace(config('livewire.class_namespace'));
+        $temporaryDirectory = sys_get_temp_dir();
 
-        return $classPath . ($path ? '/' . $path : '');
+        if (! in_array($temporaryDirectory, View::getFinder()->getPaths())) {
+            View::addLocation(sys_get_temp_dir());
+        }
+
+        $tempFilePath = tempnam($temporaryDirectory, 'tests') . '.blade.php';
+
+        file_put_contents($tempFilePath, $bladeContent);
+
+        $bladeViewName = Str::before(pathinfo($tempFilePath, PATHINFO_BASENAME), '.blade.php');
+
+        return view($bladeViewName)->render();
     }
 }
