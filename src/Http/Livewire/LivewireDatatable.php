@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Livewire\Component;
+use Livewire\Features\SupportComputed\SupportLegacyComputedPropertySyntax;
 use Livewire\WithPagination;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\ColumnSet;
@@ -748,6 +749,9 @@ class LivewireDatatable extends Component
                     case 'pgsql':
                         return new Expression('"' . $column['name'] . '"');
                         break;
+                    case 'sqlite':
+                        return new Expression('"' . $column['name'] . '"');
+                        break;
                     case 'sqlsrv':
                         return new Expression("'" . $column['name'] . "'");
                         break;
@@ -1230,6 +1234,10 @@ class LivewireDatatable extends Component
 
     public function buildDatabaseQuery($export = false)
     {
+        // Column selects add their joins to the query as they resolve, so a
+        // fresh builder needs freshly resolved columns.
+        unset($this->processedColumns);
+
         $this->query = $this->builder();
 
         $this->tablePrefix = $this->query->getConnection()->getTablePrefix() ?? '';
@@ -1760,6 +1768,13 @@ class LivewireDatatable extends Component
                 return [$value->label ?? $value->name => $item->{$value->name}];
             })->all();
         });
+    }
+
+    public function forgetComputed()
+    {
+        foreach (SupportLegacyComputedPropertySyntax::getComputedPropertyNames($this) as $property) {
+            unset($this->$property);
+        }
     }
 
     public function getQuery($export = false)

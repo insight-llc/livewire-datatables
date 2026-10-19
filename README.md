@@ -18,8 +18,9 @@
 ![screenshot](resources/images/screenshot.png "Screenshot")
 
 ## Requirements
-- [Laravel 7, 8 or 9](https://laravel.com/docs/9.x)
-- [Livewire](https://laravel-livewire.com/)
+- PHP 8.5
+- [Laravel 13](https://laravel.com/docs/13.x)
+- [Livewire 4](https://livewire.laravel.com/)
 - [Tailwind](https://tailwindcss.com/)
 - [Alpine JS](https://github.com/alpinejs/alpine)
 
@@ -28,11 +29,7 @@
 You can install the package via composer:
 
 ```bash
-composer require mediconesystems/livewire-datatables
-```
-If you use laravel 9 first execute
-```bash
-composer require psr/simple-cache:^1.0 maatwebsite/excel
+composer require insight-llc/livewire-datatables
 ```
 
 ### Optional
@@ -102,12 +99,12 @@ other as in the example above.
 ## Component Syntax
 
 ### Create a livewire component that extends ```Mediconesystems\LivewireDatatables\LivewireDatatable```
-> ```php artisan make:livewire-datatable foo``` --> 'app/Http/Livewire/Foo.php'
+> ```php artisan make:livewire-datatable foo``` --> 'app/Livewire/Foo.php'
 
-> ```php artisan make:livewire-datatable tables.bar``` --> 'app/Http/Livewire/Tables/Bar.php'
+> ```php artisan make:livewire-datatable tables.bar``` --> 'app/Livewire/Tables/Bar.php'
 
 ### Provide a datasource by declaring public property ```$model``` **OR** public method ```builder()``` that returns an instance of ```Illuminate\Database\Eloquent\Builder```
-> ```php artisan make:livewire-datatable users-table --model=user``` --> 'app/Http/Livewire/UsersTable.php' with ```public $model = User::class```
+> ```php artisan make:livewire-datatable users-table --model=user``` --> 'app/Livewire/UsersTable.php' with ```public $model = User::class```
 
 ### Declare a public method ```columns``` that returns an array containing one or more ```Mediconesystems\LivewireDatatables\Column```
 

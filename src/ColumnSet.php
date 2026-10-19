@@ -55,7 +55,7 @@ class ColumnSet
             return $this;
         }
 
-        $include = collect(is_array($include) ? $include : array_map('trim', explode(',', $include)));
+        $include = collect(is_array($include) ? $include : array_map('trim', explode(',', (string) $include)));
         $this->columns = $include->map(function ($column) {
             return Str::contains($column, '|')
                 ? Column::name(Str::before($column, '|'))->label(Str::after($column, '|'))
@@ -71,7 +71,7 @@ class ColumnSet
             return $this;
         }
 
-        $exclude = is_array($exclude) ? $exclude : array_map('trim', explode(',', $exclude));
+        $exclude = is_array($exclude) ? $exclude : array_map('trim', explode(',', (string) $exclude));
 
         $this->columns = $this->columns->reject(function ($column) use ($exclude) {
             return in_array(Str::after($column->name, '.'), $exclude);
@@ -85,7 +85,7 @@ class ColumnSet
         if (! $hidden) {
             return $this;
         }
-        $hidden = is_array($hidden) ? $hidden : array_map('trim', explode(',', $hidden));
+        $hidden = is_array($hidden) ? $hidden : array_map('trim', explode(',', (string) $hidden));
         $this->columns->each(function ($column) use ($hidden) {
             $column->hidden = in_array(Str::after($column->name, '.'), $hidden);
         });
@@ -95,7 +95,7 @@ class ColumnSet
 
     public function formatDates($dates)
     {
-        $dates = is_array($dates) ? $dates : array_map('trim', explode(',', $dates));
+        $dates = is_array($dates) ? $dates : array_map('trim', explode(',', (string) $dates));
 
         $this->columns = $this->columns->map(function ($column) use ($dates) {
             foreach ($dates as $date) {
@@ -114,7 +114,7 @@ class ColumnSet
 
     public function formatTimes($times)
     {
-        $times = is_array($times) ? $times : array_map('trim', explode(',', $times));
+        $times = is_array($times) ? $times : array_map('trim', explode(',', (string) $times));
 
         $this->columns = $this->columns->map(function ($column) use ($times) {
             foreach ($times as $time) {
@@ -137,7 +137,7 @@ class ColumnSet
             return $this;
         }
 
-        $searchable = is_array($searchable) ? $searchable : array_map('trim', explode(',', $searchable));
+        $searchable = is_array($searchable) ? $searchable : array_map('trim', explode(',', (string) $searchable));
         $this->columns->each(function ($column) use ($searchable) {
             $column->searchable = in_array($column->name, $searchable);
         });
