@@ -2,6 +2,7 @@
 
 namespace Mediconesystems\LivewireDatatables\Tests;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Mediconesystems\LivewireDatatables\Column;
 use Mediconesystems\LivewireDatatables\DateColumn;
@@ -47,7 +48,7 @@ class ColumnTest extends TestCase
         $this->assertEquals($value, $subject->$attribute);
     }
 
-    public function settersDataProvider()
+    public static function settersDataProvider()
     {
         return [
             ['label', 'Bob Vance', 'label'],
@@ -68,6 +69,9 @@ class ColumnTest extends TestCase
             ->linkTo('model', 8)
             ->toArray();
 
+        $this->assertIsCallable(Arr::pull($subject, 'callback'));
+        $this->assertIsCallable(Arr::pull($subject, 'exportCallback'));
+
         $this->assertEquals([
             'type' => 'string',
             'name' => 'table.column',
@@ -75,13 +79,11 @@ class ColumnTest extends TestCase
             'label' => 'Column',
             'filterable' => ['A', 'B', 'C'],
             'hidden' => true,
-            'callback' => function () {
-            },
             'raw' => null,
             'sort' => null,
             'defaultSort' => null,
             'searchable' => null,
-            'sortable' => null,
+            'sortable' => true,
             'params' => [],
             'additionalSelects' => [],
             'scope' => null,
@@ -93,14 +95,16 @@ class ColumnTest extends TestCase
             'headerAlign' => 'left',
             'preventExport' => null,
             'width' => null,
-            'exportCallback' => function () {
-            },
             'filterOn' => null,
             'group' => null,
             'hideable' => null,
             'index' => 0,
             'minWidth' => null,
             'maxWidth' => null,
+            'tooltip' => null,
+            'contentAlign' => 'left',
+            'summary' => false,
+            'wrappable' => true,
         ], $subject);
     }
 
@@ -113,6 +117,8 @@ class ColumnTest extends TestCase
             ->format('yyy-mm-dd')
             ->toArray();
 
+        $this->assertIsCallable(Arr::pull($subject, 'callback'));
+
         $this->assertEquals([
             'type' => 'date',
             'name' => 'table_column',
@@ -120,8 +126,6 @@ class ColumnTest extends TestCase
             'label' => 'table_column',
             'filterable' => true,
             'hidden' => null,
-            'callback' => function () {
-            },
             'raw' => 'SELECT column FROM table AS table_column',
             'sort' => 'SELECT column FROM table',
             'defaultSort' => 'asc',
@@ -134,6 +138,7 @@ class ColumnTest extends TestCase
             'filterView' => null,
             'select' => DB::raw('SELECT column FROM table'),
             'joins' => null,
+            'aggregate' => null,
             'headerAlign' => 'left',
             'preventExport' => null,
             'width' => null,
@@ -144,6 +149,10 @@ class ColumnTest extends TestCase
             'index' => 0,
             'minWidth' => null,
             'maxWidth' => null,
+            'tooltip' => null,
+            'contentAlign' => 'left',
+            'summary' => false,
+            'wrappable' => true,
         ], $subject);
     }
 
@@ -167,7 +176,7 @@ class ColumnTest extends TestCase
             'sort' => null,
             'defaultSort' => null,
             'searchable' => null,
-            'sortable' => null,
+            'sortable' => true,
             'params' => [],
             'additionalSelects' => [],
             'scope' => null,
@@ -186,6 +195,10 @@ class ColumnTest extends TestCase
             'index' => 0,
             'minWidth' => null,
             'maxWidth' => null,
+            'tooltip' => null,
+            'contentAlign' => 'left',
+            'summary' => false,
+            'wrappable' => true,
         ], $subject);
     }
 

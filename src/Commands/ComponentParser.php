@@ -8,6 +8,8 @@ class ComponentParser
 {
     protected $model;
     protected $appPath;
+    protected $baseClassNamespace;
+    protected $baseClassPath;
     protected $viewPath;
     protected $component;
     protected $componentClass;
